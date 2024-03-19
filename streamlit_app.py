@@ -72,32 +72,23 @@ st.markdown('---')
 
 # Instructions
 st.subheader('How to use 📖')
-st.markdown("1. Click open side panel and upload CSV")
+st.markdown("1. Paste search terms into text box below")
+text_input = st.text_area('Items to search!', value=None)
 st.markdown("2. Wait for scraper to complete")
-st.markdown("3. Download CSV")
+st.markdown("3. Copy output")
 st.markdown('---')
 
-# CSV uploader
-with st.sidebar:
-    uploaded_file = st.file_uploader('CSV Uploader')
-
 # Start scraper only when a CSV file is uploaded
-if uploaded_file is not None:
+if text_input is not None:
     st.subheader('Running scraper 🔁')
-
-    # original df which may containd duplicates
-    og_df = pd.read_csv(
-        uploaded_file, names=["search_term", "brand", "item_name", "variant"]
-    )
+    item_list = text_input.splitlines()
+    og_df = pd.DataFrame(item_list, columns=['search_term'])
 
     # remove duplicate rows from CSV
     df = og_df.drop_duplicates()
     search_terms = df["search_term"].values
     image_urls = []
     
-    st.caption('*Sample data to scrape*')
-    st.dataframe(df.head(), hide_index=True)
-
     # initial url to scrape
     base_url = "https://images.google.com/"
 
@@ -125,12 +116,7 @@ if uploaded_file is not None:
 
     status.update(label=f"Chrome driver initialized ✅!", state="complete", expanded=False)
     
-    # initilize progress bar
-    progress_text = "Scraping in progress. Please wait. ⏳"
-    my_bar = st.progress(1, text=progress_text)
-
     for count, term in enumerate(search_terms):
-        my_bar.progress(count, text=progress_text)
         with st.status(f'Searching 🔁', expanded=True) as status:
             try:
                 if not wait_for_loading(driver, By.CLASS_NAME, "og3lId"):
@@ -203,18 +189,10 @@ if uploaded_file is not None:
 
     # merge distinct search terms back to original CSV (which may contain duplicates).
     output_df = og_df.merge(df, how='left', on='search_term')
-    
-    # convert df to csv
-    csv = convert_df(output_df)
-
-    # download button
-    if ste.download_button(
-    "Click to download!",
-    csv,
-    "ouptut.csv"
-    ): 
-        st.write('Scraping Complete ✅')
-    
+    image_urls = output_df['search_term'].to_list()
+    st.markdown('---')
+    for i in image_urls:
+        st.markdown(i)
 
 
 
