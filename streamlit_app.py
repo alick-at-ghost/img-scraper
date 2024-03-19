@@ -189,7 +189,7 @@ if text_input is not None:
 
     # merge distinct search terms back to original CSV (which may contain duplicates).
     output_df = og_df.merge(df, how='left', on='search_term')
-    image_urls = output_df['search_term'].to_list()
+    image_urls = output_df['image_url'].to_list()
     st.markdown('---')
     for i in image_urls:
         st.markdown(i)
