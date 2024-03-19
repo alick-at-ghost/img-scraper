@@ -1,0 +1,5 @@
+streamlit
+streamlit-ext==0.1.10
+selenium==4.11.2
+webdriver-manager
+psutil
