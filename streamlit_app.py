@@ -191,8 +191,11 @@ if text_input is not None:
     output_df = og_df.merge(df, how='left', on='search_term')
     image_urls = output_df['image_url'].to_list()
     st.markdown('---')
+    url_output = ''
     for i in image_urls:
-        st.markdown(i)
+        img_url = i + '\n'
+        url_output += img_url
 
+    st.text_area('Image URLs', value=url_output)
 
 
