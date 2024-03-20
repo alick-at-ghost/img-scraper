@@ -66,8 +66,8 @@ def get_driver():
 
 # App title
 st.set_page_config(page_title="Image Scraper")
-st.title('📸 Image Scraper')
-st.caption('This app takes a CSV, searches Google Images and appends the first image url results.')
+st.title('Nimbus ☁️')
+st.caption('Image scraping app that takes in a list of item(s) and returns the relevant Image URL from Google Images.')
 st.markdown('---')
 
 # Instructions
