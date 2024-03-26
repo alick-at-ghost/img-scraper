@@ -67,12 +67,10 @@ def get_driver():
 def update_text_area(text):
     st.session_state.url_output = text
 
-def show_image(image_url):
+def update_progress(image_url):
     st.session_state['img_output'] = image_url
     with image_output_container.container():
         st.image(st.session_state['img_output'], width=150)
-
-def update_progress_bar(progress_text):
     my_bar.progress(st.session_state["count"], text=progress_text)
 
 # App title
@@ -194,8 +192,7 @@ if text_input is not None:
                     # ensure image url is properly formatted
                     src = format_url(src)
                     image_urls.append(src)
-                    update_progress_bar(progress_text)
-                    show_image(src)
+                    update_progress(src)
                     break
 
                 # Check for the carousel image if the primary image was not found
@@ -207,19 +204,16 @@ if text_input is not None:
                         # ensure image url is properly formatted
                         src = format_url(src)
                         image_urls.append(src)
-                        update_progress_bar(progress_text)
-                        show_image(src)
+                        update_progress(src)
                         break  # A valid image URL was found; exit the loop
             time.sleep(0.5)
         except NoSuchElementException:
-            update_progress_bar(progress_text)
-            show_image(src)
+            update_progress(src)
             image_urls.append('https://i.imgur.com/Bs1Tj0Y.png')
             # Continue to the next iteration if element not found
             pass
         except Exception as e:
-            update_progress_bar(progress_text)
-            show_image(src)
+            update_progress(src)
             # Log other exceptions for debugging
             image_urls.append('https://i.imgur.com/Bs1Tj0Y.png')
        
